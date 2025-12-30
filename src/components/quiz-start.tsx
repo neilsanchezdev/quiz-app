@@ -7,29 +7,28 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Clock, Trophy, Zap, User } from "lucide-react"
 
 interface QuizStartProps {
-    onStart: (userInfo: { name: string; idType: string; idNumber: string }) => void
+    onStart: (userInfo: { name: string; email: string; phone: string }) => void
     totalQuestions: number
     quizTitle?: string
 }
 
 export function QuizStart({ onStart, totalQuestions, quizTitle }: QuizStartProps) {
     const [name, setName] = useState("")
-    const [idType, setIdType] = useState("")
-    const [idNumber, setIdNumber] = useState("")
+    const [email, setEmail] = useState("")
+    const [phone, setPhone] = useState("")
     const [showForm, setShowForm] = useState(false)
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()
-        if (name.trim() && idType && idNumber.trim()) {
-            onStart({ name: name.trim(), idType, idNumber: idNumber.trim() })
+        if (name.trim() && email.trim() && phone.trim()) {
+            onStart({ name: name.trim(), email: email.trim(), phone: phone.trim() })
         }
     }
 
-    const isFormValid = name.trim() !== "" && idType !== "" && idNumber.trim() !== ""
+    const isFormValid = name.trim() !== "" && email.trim() !== "" && phone.trim() !== ""
 
     return (
         <div className="min-h-screen flex items-center justify-center p-4">
@@ -106,29 +105,25 @@ export function QuizStart({ onStart, totalQuestions, quizTitle }: QuizStartProps
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="idType">Tipo de Identificación</Label>
-                                <Select value={idType} onValueChange={setIdType} required>
-                                    <SelectTrigger id="idType">
-                                        <SelectValue placeholder="Selecciona el tipo de documento" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="DNI">DNI</SelectItem>
-                                        <SelectItem value="Cédula">Cédula</SelectItem>
-                                        <SelectItem value="Pasaporte">Pasaporte</SelectItem>
-                                        <SelectItem value="Carnet de Extranjería">Carnet de Extranjería</SelectItem>
-                                        <SelectItem value="Otro">Otro</SelectItem>
-                                    </SelectContent>
-                                </Select>
+                                <Label htmlFor="email">Correo Electrónico</Label>
+                                <Input
+                                    id="email"
+                                    type="email"
+                                    placeholder="correo@ejemplo.com"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                />
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="idNumber">Número de Identificación</Label>
+                                <Label htmlFor="phone">Teléfono</Label>
                                 <Input
-                                    id="idNumber"
-                                    type="text"
-                                    placeholder="Ingresa tu número de documento"
-                                    value={idNumber}
-                                    onChange={(e) => setIdNumber(e.target.value)}
+                                    id="phone"
+                                    type="tel"
+                                    placeholder="+57 311 567 8900"
+                                    value={phone}
+                                    onChange={(e) => setPhone(e.target.value)}
                                     required
                                 />
                             </div>

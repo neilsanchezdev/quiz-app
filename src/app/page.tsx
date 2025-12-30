@@ -43,7 +43,7 @@ export default function QuizPage() {
   const [answers, setAnswers] = useState<QuizAnswer[]>([])
   const [quizzes, setQuizzes] = useState<Quiz[]>([])
   const [loading, setLoading] = useState(true)
-  const [userInfo, setUserInfo] = useState<{ name: string; idType: string; idNumber: string } | null>(null)
+  const [userInfo, setUserInfo] = useState<{ name: string; email: string; phone: string } | null>(null)
 
   useEffect(() => {
     async function fetchQuizzes() {
@@ -60,7 +60,7 @@ export default function QuizPage() {
     fetchQuizzes()
   }, [])
 
-  const currentQuestion = questions[currentQuestionIndex]
+  const currentQuestion = questions.length > 0 ? questions[currentQuestionIndex] : null
   const selectedQuiz = quizzes.find((q) => q.id === selectedQuizId)
 
   const handleSelectQuiz = (quizId: string) => {
@@ -68,7 +68,7 @@ export default function QuizPage() {
     setState("start")
   }
 
-  const handleStart = async (userData: { name: string; idType: string; idNumber: string }) => {
+  const handleStart = async (userData: { name: string; email: string; phone: string }) => {
     try {
       setUserInfo(userData)
       const response = await fetch(`/api/quiz/start?quizId=${selectedQuizId}`, {
@@ -77,8 +77,8 @@ export default function QuizPage() {
         body: JSON.stringify({
           quizId: selectedQuizId,
           userName: userData.name,
-          userIdType: userData.idType,
-          userIdNumber: userData.idNumber,
+          userEmail: userData.email,
+          userPhone: userData.phone,
         }),
       })
       const data = await response.json()
@@ -94,6 +94,11 @@ export default function QuizPage() {
   }
 
   const handleAnswer = async (selectedAnswer: string | null, timeUsed: number) => {
+    if (!currentQuestion) {
+      console.error("[v0] No current question available")
+      return
+    }
+
     try {
       const response = await fetch("/api/quiz/submit", {
         method: "POST",

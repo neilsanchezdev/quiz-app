@@ -51,8 +51,8 @@ model QuizSession {
   id          String   @id @default(uuid())
   quizId      String
   userName    String
-  userIdType  String   // Tipo de identificación (DNI, Pasaporte, Cédula, etc.)
-  userIdNumber String  // Número de identificación
+  userEmail   String
+  userPhone   String
   startedAt   DateTime @default(now())
   completedAt DateTime?
   totalScore  Int      @default(0)
@@ -61,7 +61,7 @@ model QuizSession {
   answers     UserAnswer[]
   
   @@index([quizId])
-  @@index([userIdNumber])
+  @@index([userEmail])
 }
 
 model UserAnswer {

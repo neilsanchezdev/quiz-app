@@ -28,8 +28,8 @@ export interface QuizSession {
     id: string
     quizId: string
     userName: string // Agregado nombre del usuario
-    userIdType: string // Agregado tipo de identificación
-    userIdNumber: string // Agregado número de identificación
+    userEmail: string // Actualizado con correo del usuario
+    userPhone: string // Actualizado con teléfono del usuario
     answers: UserAnswer[]
     totalScore: number
     startedAt: Date
