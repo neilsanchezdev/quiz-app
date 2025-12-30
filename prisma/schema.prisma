@@ -1,0 +1,81 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma/client"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+
+/* ===========================
+       MODELOS
+=========================== */
+
+model Quiz {
+  id          String    @id @default(uuid())
+  title       String
+  description String    @db.Text
+  difficulty  String
+  totalQuestions Int
+  estimatedTime  String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  questions   Question[]
+  sessions    QuizSession[]
+}
+
+model Question {
+  id            String   @id @default(uuid())
+  quizId        String
+  question      String   @db.Text
+  options       Json     // Usando tipo Json nativo de MySQL en lugar de String
+  correctAnswer Int
+  timeLimit     Int
+  points        Int
+  order         Int
+  createdAt     DateTime @default(now())
+  
+  quiz          Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  
+  @@index([quizId])
+}
+
+model QuizSession {
+  id          String   @id @default(uuid())
+  quizId      String
+  userName    String
+  userIdType  String   // Tipo de identificación (DNI, Pasaporte, Cédula, etc.)
+  userIdNumber String  // Número de identificación
+  startedAt   DateTime @default(now())
+  completedAt DateTime?
+  totalScore  Int      @default(0)
+  
+  quiz        Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  answers     UserAnswer[]
+  
+  @@index([quizId])
+  @@index([userIdNumber])
+}
+
+model UserAnswer {
+  id              String   @id @default(uuid())
+  sessionId       String
+  questionId      String
+  selectedOption  String?  // Puede ser null si el tiempo se agota sin respuesta
+  isCorrect       Boolean
+  timeSpent       Int
+  pointsEarned    Int
+  answeredAt      DateTime @default(now())
+  
+  session         QuizSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  
+  @@index([sessionId])
+  @@index([questionId])
+}
