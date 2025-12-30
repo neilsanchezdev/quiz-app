@@ -7,11 +7,11 @@ Este README explica **cómo ejecutar el proyecto desde cero paso a paso**, inclu
 
 ## 🧰 Requisitos
 
-| Herramienta | Versión recomendada        |
-| ----------- | -------------------------- |
-| Node.js     | ≥ 20.x                     |
-| npm         | ≥ 10.x                     |
-| MariaDB     | ≥ 10.5 o MySQL equivalente |
+| Herramienta | Versión recomendada       |
+| ----------- | ------------------------- |
+| Node.js     | ≥ 20.x                    |
+| npm         | ≥ 10.x                    |
+| Mysql       | ≥ 8.0 o MySQL equivalente |
 
 ---
 
@@ -19,7 +19,7 @@ Este README explica **cómo ejecutar el proyecto desde cero paso a paso**, inclu
 
 ### 1) Clonar repositorio
 
-git clone <URL_DEL_REPO>
+git clone https://github.com/neilsanchezdev/quiz-app
 cd quiz-app
 
 ### 2) Instalar dependencias
@@ -30,19 +30,15 @@ npm install
 
 cp .env.example .env
 
-### 4) Editar .env con tu configuración local
+### 4) Editar .env con tu configuración
 
-# (si root NO tiene contraseña, deja DATABASE_PASSWORD vacío)
-
-# DATABASE_URL="mysql://user:password@host:port/dbname"
-
-# DATABASE_HOST=localhost
-
-# DATABASE_USER=root
-
-# DATABASE_PASSWORD=
-
-# DATABASE_NAME=quiz_db
+```
+DATABASE_URL="mysql://user:password@host:port/dbname"
+DATABASE_HOST=localhost
+DATABASE_USER=root
+DATABASE_PASSWORD=
+DATABASE_NAME=quiz_db
+```
 
 ### 5) Crear base de datos en MySQL
 
@@ -60,7 +56,7 @@ npm run db:push
 
 npm run db:migrate
 
-### 9) Llenar la bd con quizzes (opcional)
+### 9) (Opcional) Llenar la bd con quizzes
 
 npm run db:seed
 
