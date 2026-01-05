@@ -75,10 +75,8 @@ export async function POST(request: Request) {
         })
 
         return NextResponse.json({
-            isCorrect,
-            correctAnswer: question.correctAnswer,
-            score,
-            timeUsed,
+            success: true,
+            message: "Respuesta registrada correctamente"
         })
     } catch (error) {
         console.error("[v0] Error in /api/quiz/submit:", error)

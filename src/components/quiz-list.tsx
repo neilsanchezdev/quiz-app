@@ -3,7 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Clock, BookOpen, FlaskConical, Globe } from "lucide-react"
-import { Logo } from "./logo"
+import { Logo } from "@/components/logo"
 
 interface Quiz {
     id: string

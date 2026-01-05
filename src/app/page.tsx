@@ -18,11 +18,8 @@ interface SafeQuestion {
 
 interface QuizAnswer {
   questionId: string
-  selectedAnswer: string | null // permitir null cuando no se responde
+  selectedAnswer: string | null
   timeUsed: number
-  score: number
-  isCorrect: boolean
-  correctAnswer: string
 }
 
 interface Quiz {
@@ -117,9 +114,6 @@ export default function QuizPage() {
         questionId: currentQuestion.id,
         selectedAnswer,
         timeUsed,
-        score: data.score,
-        isCorrect: data.isCorrect,
-        correctAnswer: data.correctAnswer,
       }
 
       setAnswers([...answers, newAnswer])
@@ -170,9 +164,7 @@ export default function QuizPage() {
           onAnswer={handleAnswer}
         />
       )}
-      {state === "results" && (
-        <QuizResults answers={answers} questions={questions} sessionId={sessionId} onRestart={handleRestart} />
-      )}
+      {state === "results" && <QuizResults onRestart={handleRestart} />}
     </>
   )
 }

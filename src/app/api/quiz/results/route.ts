@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
-import { quizQuestionBanks, quizSessions } from "@/lib/quiz-data"
 
 export async function GET(request: Request) {
     try {
@@ -10,43 +9,6 @@ export async function GET(request: Request) {
         if (!sessionId) {
             return NextResponse.json({ error: "Missing sessionId" }, { status: 400 })
         }
-
-        // const session = quizSessions.get(sessionId)
-
-        // if (!session) {
-        //     return NextResponse.json({ error: "Invalid session" }, { status: 404 })
-        // }
-
-        // session.completedAt = new Date()
-
-        // const questions = quizQuestionBanks[session.quizId]
-
-        // const results = questions.map((q) => {
-        //     const answer = session.answers.find((a) => a.questionId === q.id)
-
-        //     return {
-        //         questionId: q.id,
-        //         question: q.question,
-        //         options: q.options.map((o) => o.text),
-        //         correctAnswer: q.correctAnswer,
-        //         selectedAnswer: answer?.selectedOption ?? -1,
-        //         timeUsed: answer?.timeSpent ?? 0,
-        //         isCorrect: answer?.isCorrect ?? false,
-        //         score: answer?.pointsEarned ?? 0,
-        //         maxPoints: q.points,
-        //     }
-        // })
-
-        // const totalScore = session.totalScore
-        // const maxPossibleScore = questions.reduce((sum, q) => sum + q.points, 0)
-        // const percentage = Math.round((totalScore / maxPossibleScore) * 100)
-
-        // return NextResponse.json({
-        //     results,
-        //     totalScore,
-        //     maxPossibleScore,
-        //     percentage,
-        // })
 
         const session = await prisma.quizSession.findUnique({
             where: { id: sessionId },
@@ -95,10 +57,8 @@ export async function GET(request: Request) {
         const percentage = Math.round((totalScore / maxPossibleScore) * 100)
 
         return NextResponse.json({
-            results,
-            totalScore,
-            maxPossibleScore,
-            percentage,
+            success: true,
+            message: "Quiz completado. Sus respuestas han sido registradas y serán evaluadas por nuestro equipo."
         })
     } catch (error) {
         console.error("[v0] Error in /api/quiz/results:", error)
