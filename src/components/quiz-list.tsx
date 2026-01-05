@@ -3,6 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Clock, BookOpen, FlaskConical, Globe } from "lucide-react"
+import { Logo } from "./logo"
 
 interface Quiz {
     id: string
@@ -35,6 +36,12 @@ export function QuizList({ quizzes, onSelectQuiz }: QuizListProps) {
         <div className="min-h-screen flex items-center justify-center p-4">
             <div className="w-full max-w-6xl space-y-8">
                 <div className="text-center space-y-4">
+                    <div className="flex justify-center mb-6">
+                        <div className="bg-primary p-6 rounded-lg shadow-lg">
+                            <Logo className="w-16 h-16" />
+
+                        </div>
+                    </div>
                     <h1 className="text-4xl font-bold text-balance">Elige tu Quiz</h1>
                     <p className="text-lg text-muted-foreground text-pretty">
                         Selecciona un quiz y pon a prueba tus conocimientos
