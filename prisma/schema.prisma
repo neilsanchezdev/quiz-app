@@ -25,6 +25,7 @@ model Quiz {
   difficulty  String
   totalQuestions Int
   estimatedTime  String
+  isActive    Boolean   @default(true)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   questions   Question[]

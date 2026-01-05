@@ -1,4 +1,44 @@
-import { prisma } from "../src/lib/prisma"
+import "dotenv/config"
+import { PrismaClient } from "@prisma/client"
+import { PrismaMariaDb } from "@prisma/adapter-mariadb"
+
+console.log("🔍 Variables de entorno detectadas:")
+console.log(`  DATABASE_HOST: "${process.env.DATABASE_HOST}"`)
+console.log(`  DATABASE_PORT: "${process.env.DATABASE_PORT}"`)
+console.log(`  DATABASE_USER: "${process.env.DATABASE_USER}"`)
+console.log(`  DATABASE_PASSWORD: "${process.env.DATABASE_PASSWORD}"`)
+console.log(`  DATABASE_NAME: "${process.env.DATABASE_NAME}"`)
+console.log()
+
+const requiredEnvVars = ["DATABASE_HOST", "DATABASE_PORT", "DATABASE_USER", "DATABASE_NAME"]
+const missingVars = requiredEnvVars.filter((varName) => {
+    const value = process.env[varName]
+    return !value || value.trim() === ""
+})
+
+if (missingVars.length > 0) {
+    console.error(`❌ ERROR: Las siguientes variables están vacías o no existen: ${missingVars.join(", ")}`)
+    console.error("\nPor favor verifica tu archivo .env en la raíz del proyecto:")
+    console.error('DATABASE_HOST="localhost"')
+    console.error('DATABASE_PORT="3306"')
+    console.error('DATABASE_USER="root"')
+    console.error('DATABASE_PASSWORD=""  # puede estar vacío si no tienes password')
+    console.error('DATABASE_NAME="quizdb"')
+    process.exit(1)
+}
+
+console.log("Conectando a la base de datos...")
+
+const adapter = new PrismaMariaDb({
+    host: process.env.DATABASE_HOST!,
+    port: Number(process.env.DATABASE_PORT!),
+    user: process.env.DATABASE_USER!,
+    password: process.env.DATABASE_PASSWORD || undefined,
+    database: process.env.DATABASE_NAME!,
+    connectionLimit: 5,
+})
+
+const prisma = new PrismaClient({ adapter })
 
 const quizData = [
     {
@@ -8,6 +48,7 @@ const quizData = [
         difficulty: "medium",
         totalQuestions: 5,
         estimatedTime: "5 min",
+        isActive: true,
         questions: [
             {
                 question: "¿Cuál es la capital de Francia?",
@@ -83,6 +124,7 @@ const quizData = [
         difficulty: "hard",
         totalQuestions: 5,
         estimatedTime: "7 min",
+        isActive: true,
         questions: [
             {
                 question: "¿Cuál es el elemento químico con símbolo Au?",
@@ -158,6 +200,7 @@ const quizData = [
         difficulty: "medium",
         totalQuestions: 5,
         estimatedTime: "6 min",
+        isActive: true,
         questions: [
             {
                 question: "¿En qué año comenzó la Primera Guerra Mundial?",

@@ -4,6 +4,9 @@ import { prisma } from "@/lib/prisma"
 export async function GET() {
   try {
     const quizzes = await prisma.quiz.findMany({
+      where: {
+        isActive: true
+      },
       include: {
         _count: {
           select: { questions: true },
@@ -21,24 +24,18 @@ export async function GET() {
         estimatedTime: quiz.estimatedTime,
       })),
     )
-
   } catch (error) {
     console.error("[v0] Error in /api/quizzes:", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }
 
-/**
- * Crea un nuevo quiz
- * @param request 
- * @returns 
- */
 export async function POST(request: Request) {
   try {
     const body = await request.json()
 
     // Validar datos requeridos
-    const { title, description, difficulty, estimatedTime, questions } = body
+    const { title, description, difficulty, estimatedTime, questions, isActive = true } = body
 
     if (!title || !description || !difficulty || !questions || !Array.isArray(questions)) {
       return NextResponse.json(
@@ -76,18 +73,18 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: "Each question must have 'timeLimit' and 'points' fields" }, { status: 400 })
       }
     }
-
-    const quiz = await prisma.quiz.create({
+    const quiz: any = await prisma.quiz.create({
       data: {
         title,
         description,
         difficulty,
         totalQuestions: questions.length,
         estimatedTime: estimatedTime || `${Math.ceil(questions.length * 0.5)} min`,
+        isActive,
         questions: {
           create: questions.map((q: any, index: number) => ({
             question: q.question,
-            options: q.options, // MySQL almacena esto como JSON
+            options: q.options,
             correctAnswer: q.correctAnswer,
             timeLimit: q.timeLimit,
             points: q.points,

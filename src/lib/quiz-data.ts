@@ -22,6 +22,7 @@ export interface Quiz {
     difficulty: "Fácil" | "Medio" | "Difícil"
     totalQuestions: number
     estimatedTime: string
+    isActive?: boolean
 }
 
 export interface QuizSession {
@@ -256,6 +257,7 @@ export const quizMetadata: Quiz[] = [
         difficulty: "Fácil",
         totalQuestions: 5,
         estimatedTime: "2 min",
+        isActive: true,
     },
     {
         id: "ciencias",
@@ -264,6 +266,7 @@ export const quizMetadata: Quiz[] = [
         difficulty: "Medio",
         totalQuestions: 5,
         estimatedTime: "3 min",
+        isActive: true,
     },
     {
         id: "historia-mundial",
@@ -272,6 +275,7 @@ export const quizMetadata: Quiz[] = [
         difficulty: "Medio",
         totalQuestions: 5,
         estimatedTime: "3 min",
+        isActive: true,
     },
 ]
 
