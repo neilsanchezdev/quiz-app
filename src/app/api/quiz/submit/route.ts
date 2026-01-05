@@ -9,7 +9,6 @@ export async function POST(request: Request) {
 
         console.log("[v0] Submit request:", { sessionId, questionId, selectedOption, timeUsed })
 
-        // Validar parámetros
         if (!sessionId || !questionId || selectedOption === undefined || timeUsed === undefined) {
             return NextResponse.json({ error: "Missing required parameters" }, { status: 400 })
         }
@@ -41,11 +40,13 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: "Question not found" }, { status: 404 })
         }
 
-        const selectedIndex = selectedOption ? Number.parseInt(selectedOption) : null
+        const selectedOptionStr = selectedOption !== null ? String(selectedOption) : null
+        const selectedIndex = selectedOptionStr ? Number.parseInt(selectedOptionStr) : null
         const isCorrect = selectedIndex !== null && selectedIndex === question.correctAnswer
 
         console.log("[v0] Validation:", {
             selectedOption,
+            selectedOptionStr,
             selectedIndex,
             correctAnswer: question.correctAnswer,
             isCorrect,
@@ -57,7 +58,7 @@ export async function POST(request: Request) {
             data: {
                 sessionId,
                 questionId,
-                selectedOption,
+                selectedOption: selectedOptionStr,
                 isCorrect,
                 timeSpent: timeUsed,
                 pointsEarned: score,
